@@ -209,7 +209,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.002,
             # Calculate accuracy on the test set
             accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
-            print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train, keep_prob:1, training:False}))
+            # print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train, keep_prob:1, training:False}))
             print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test, keep_prob:1, training:False}))
 
             return parameters
@@ -236,12 +236,12 @@ def train_summary(epoch, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train
     # Calculate accuracy on the test set
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
-    train_accuracy = accuracy.eval({X: X_train, Y: Y_train.T, keep_prob: 1, training:False})
+    # train_accuracy = accuracy.eval({X: X_train, Y: Y_train.T, keep_prob: 1, training:False})
     test_accuracy = accuracy.eval({X: X_test, Y: Y_test.T, keep_prob: 1, training:False})
 
     if epoch -1 == 0:
         print("Loop" + '\t' + "Train Loss" + '\t' + "Train Acc %" + '\t' + "Test Loss" + '\t' + "Test Acc %")
-    print("%i \t \t %f \t %f \t %f \t %f" % (epoch, epoch_cost, train_accuracy*100, validation_cost, test_accuracy*100))
+    print("%i \t \t %f \t %f \t %f \t %f" % (epoch, epoch_cost, validation_cost, test_accuracy*100))
 
 
 
