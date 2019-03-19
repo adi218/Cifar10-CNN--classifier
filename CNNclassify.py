@@ -65,9 +65,9 @@ def initialize_parameters():
     # to add to regularizer
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, W1)
     b1 = tf.get_variable("b1", [32, 1], initializer=tf.zeros_initializer())
-    W2 = tf.get_variable("W2", [3, 3, 32, 64], initializer=tf.contrib.layers.xavier_initializer())
+    W2 = tf.get_variable("W2", [5, 5, 32, 48], initializer=tf.contrib.layers.xavier_initializer())
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, W2)
-    b2 = tf.get_variable("b2", [64, 1], initializer=tf.zeros_initializer())
+    b2 = tf.get_variable("b2", [48, 1], initializer=tf.zeros_initializer())
     # W3 = tf.get_variable("W3", [50, 25], initializer=tf.contrib.layers.xavier_initializer())
     # b3 = tf.get_variable("b3", [50, 1], initializer=tf.zeros_initializer())
     Wf = tf.get_variable("Wf", [10, 30], initializer=tf.contrib.layers.xavier_initializer())
@@ -98,16 +98,17 @@ def forward_propagation(X, parameters, keep_prob, training):
     # input = 32x32x3 o/p = 28x28x32
     Z1 = tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME') + b1 # conv + b1
     A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
-    # input = 28x28x32 o/p = 22x22x32
-    P1 = tf.nn.max_pool(A1, ksize=[1, 7, 7, 1], strides=[1, 7, 7, 1], padding='SAME')
+    # input = 28x28x32 o/p = 14x14x32
+    P1 = tf.nn.max_pool(A1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
     # A1 = tf.layers.batch_normalization(A1, axis=0, training=training)
     # A1 = tf.nn.dropout(A1, keep_prob=keep_prob)
-    #input = 22x22x32 o/p = 20x20x64
 
+    #input = 14x14x32 o/p = 10x10x48
     Z2 = tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME')  # Z2 = np.dot(W2, a1) + b2
     A2 = tf.nn.relu(Z2)  # A2 = relu(Z2)
-    #input = 20x20x64 o/p = 16x16x64
-    P2 = tf.nn.max_pool(A2, ksize=[1, 5, 5, 1], strides=[1, 5, 5, 1], padding='SAME')
+
+    #input = 10x10x48 o/p = 5x5x48
+    P2 = tf.nn.max_pool(A2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     P2 = tf.contrib.layers.flatten(P2)
     Zf = tf.contrib.layers.fully_connected(P2, num_outputs=10, activation_fn=None)
@@ -131,7 +132,7 @@ def compute_cost(Zf, Y, beta=0.1):
 
 
 def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.002,
-          num_epochs=101, minibatch_size=2, print_cost=True):
+          num_epochs=101, minibatch_size=32, print_cost=True):
 
     ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
     tf.set_random_seed(1)  # to keep consistent results
