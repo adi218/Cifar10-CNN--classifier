@@ -54,6 +54,8 @@ def create_placeholders(n_h, n_w, n_c, n_y):
 
     X = tf.placeholder(tf.float32, shape=[None, n_h, n_w, n_c], name='X')
     Y = tf.placeholder(tf.float32, shape=[None, n_y], name='Y')
+    print(str(X))
+    print(str(Y))
 
     return X, Y
 
@@ -70,17 +72,18 @@ def initialize_parameters():
     b2 = tf.get_variable("b2", [48, 1], initializer=tf.zeros_initializer())
     # W3 = tf.get_variable("W3", [50, 25], initializer=tf.contrib.layers.xavier_initializer())
     # b3 = tf.get_variable("b3", [50, 1], initializer=tf.zeros_initializer())
-    Wf = tf.get_variable("Wf", [10, 30], initializer=tf.contrib.layers.xavier_initializer())
+    # Wf = tf.get_variable("Wf", [10, 30], initializer=tf.contrib.layers.xavier_initializer())
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, Wf)
-    bf = tf.get_variable("bf", [10, 1], initializer=tf.zeros_initializer())
+    # bf = tf.get_variable("bf", [10, 1], initializer=tf.zeros_initializer())
     parameters = {"W1": W1,
                   "b1": b1,
                   "W2": W2,
                   "b2": b2,
                   # "W3": W3,
                   # "b3": b3,
-                  "Wf": Wf,
-                  "bf": bf}
+                  # "Wf": Wf,
+                  # "bf": bf
+                   }
 
     return parameters
 
@@ -92,11 +95,11 @@ def forward_propagation(X, parameters, keep_prob, training):
     b2 = parameters['b2']
     # W3 = parameters['W3']
     # b3 = parameters['b3']
-    Wf = parameters['Wf']
-    bf = parameters['bf']
+    # Wf = parameters['Wf']
+    # bf = parameters['bf']
 
     # input = 32x32x3 o/p = 28x28x32
-    Z1 = tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME') + b1 # conv + b1
+    Z1 = tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME') # conv + b1
     A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
     # input = 28x28x32 o/p = 14x14x32
     P1 = tf.nn.max_pool(A1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
@@ -104,7 +107,7 @@ def forward_propagation(X, parameters, keep_prob, training):
     # A1 = tf.nn.dropout(A1, keep_prob=keep_prob)
 
     #input = 14x14x32 o/p = 10x10x48
-    Z2 = tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME')  # Z2 = np.dot(W2, a1) + b2
+    Z2 = tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME') # Z2 = np.dot(W2, a1) + b2
     A2 = tf.nn.relu(Z2)  # A2 = relu(Z2)
 
     #input = 10x10x48 o/p = 5x5x48
@@ -131,14 +134,14 @@ def compute_cost(Zf, Y, beta=0.1):
     return loss
 
 
-def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.002,
-          num_epochs=101, minibatch_size=32, print_cost=True):
+def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.0002,
+          num_epochs=101, minibatch_size=4, print_cost=True):
 
     ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
     tf.set_random_seed(1)  # to keep consistent results
     seed = 3  # to keep consistent results
     (m, n_h, n_w, n_c) = X_train.shape  # (n_x: input size, m : number of examples in the train set)
-    n_y = Y_train.shape[0]  # n_y : output size
+    n_y = Y_train.shape[1]  # n_y : output size
     costs = []  # To keep track of the cost
 
     # Create Placeholders of shape (n_x, n_y)
@@ -178,7 +181,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.002,
                 validation_cost = 0
                 num_minibatches = int(m / minibatch_size)  # number of minibatches of size minibatch_size in the train set
                 seed = seed + 1
-                minibatches = random_mini_batches(X_train, Y_train.T, minibatch_size, seed)
+                minibatches = random_mini_batches(X_train, Y_train, minibatch_size, seed)
 
                 for minibatch in minibatches:
                     # Select a minibatch
@@ -187,7 +190,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.002,
                     _, minibatch_cost = sess.run([optimizer, cost], feed_dict={X: minibatch_X, Y: minibatch_Y, keep_prob:0.8, training:True})
 
                     epoch_cost += minibatch_cost / num_minibatches
-                minibatch_validation_cost = sess.run(cost, feed_dict={X: X_test, Y: Y_test.T, keep_prob: 0.8, training:True})
+                minibatch_validation_cost = sess.run(cost, feed_dict={X: X_test, Y: Y_test, keep_prob: 0.8, training:True})
                 validation_cost += minibatch_validation_cost
                 # Print the cost every epoch
                 train_summary(epoch+1, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train, X_test, Y_test, keep_prob, training)
@@ -233,15 +236,15 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.002,
 def train_summary(epoch, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train, X_test, Y_test, keep_prob, training):
 
     # Calculate the correct predictions
-    correct_prediction = tf.equal(tf.argmax(Zf), tf.argmax(Y))
+    correct_prediction = tf.equal(tf.argmax(Zf, 1), tf.argmax(Y, 1))
     # Calculate accuracy on the test set
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
-    # train_accuracy = accuracy.eval({X: X_train, Y: Y_train.T, keep_prob: 1, training:False})
-    test_accuracy = accuracy.eval({X: X_test, Y: Y_test.T, keep_prob: 1, training:False})
+    # train_accuracy = accuracy.eval({X: X_train, Y: Y_train, keep_prob: 1, training:False})
+    test_accuracy = accuracy.eval({X: X_test, Y: Y_test, keep_prob: 1, training:False})
 
     if epoch -1 == 0:
-        print("Loop" + '\t' + "Train Loss" + '\t' + "Train Acc %" + '\t' + "Test Loss" + '\t' + "Test Acc %")
+        print("Loop" + '\t' + "Train Loss" + '\t' + "Test Loss" + '\t' + "Test Acc %")
     print("%i \t \t %f \t %f \t %f" % (epoch, epoch_cost, validation_cost, test_accuracy*100))
 
 
@@ -264,10 +267,14 @@ def trainer(op, file):
 
     p = Preprocessor()
     X_train, labels_train, X_test, labels_test = p.load_data()
-    Y_train = np.squeeze(one_hot_matrix(labels=labels_train, C=10), -1)
-    Y_test = np.squeeze(one_hot_matrix(labels=labels_test, C=10), -1)
+    Y_train = np.squeeze(one_hot_matrix(labels=labels_train, C=10), -1).T
+    Y_test = np.squeeze(one_hot_matrix(labels=labels_test, C=10), -1).T
     X_train = X_train / 255
     X_test = X_test / 255
+    print("X_train shape: " + str(X_train.shape))
+    print("Y_train shape: " + str(Y_train.shape))
+    print("X_test shape: " + str(X_test.shape))
+    print("Y_test shape: " + str(Y_test.shape))
     model(X_train, Y_train, X_test, Y_test, op, file)
 
 
