@@ -63,15 +63,21 @@ def create_placeholders(n_h, n_w, n_c, n_y):
 def initialize_parameters():
 
 
-    W1 = tf.get_variable("W1", [5, 5, 3, 32], initializer=tf.contrib.layers.xavier_initializer())
+    W1 = tf.get_variable("W1", [3, 3, 3, 32], initializer=tf.contrib.layers.xavier_initializer())
     # to add to regularizer
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, W1)
     b1 = tf.get_variable("b1", [32], initializer=tf.zeros_initializer())
+    W3 = tf.get_variable("W3", [3, 3, 32, 48], initializer=tf.contrib.layers.xavier_initializer())
+    b3 = tf.get_variable("b3", [48, 1], initializer=tf.zeros_initializer())
+
     W2 = tf.get_variable("W2", [3, 3, 48, 64], initializer=tf.contrib.layers.xavier_initializer())
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, W2)
     b2 = tf.get_variable("b2", [64], initializer=tf.zeros_initializer())
-    W3 = tf.get_variable("W3", [3, 3, 32, 48], initializer=tf.contrib.layers.xavier_initializer())
-    b3 = tf.get_variable("b3", [48, 1], initializer=tf.zeros_initializer())
+
+    Wf = tf.get_variable("Wf", [3, 3, 64, 128], initializer=tf.contrib.layers.xavier_initializer())
+    # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, W2)
+    bf = tf.get_variable("bf", [128], initializer=tf.zeros_initializer())
+
     # Wf = tf.get_variable("Wf", [10, 30], initializer=tf.contrib.layers.xavier_initializer())
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, Wf)
     # bf = tf.get_variable("bf", [10, 1], initializer=tf.zeros_initializer())
@@ -81,8 +87,8 @@ def initialize_parameters():
                   "b2": b2,
                   "W3": W3,
                   "b3": b3,
-                  # "Wf": Wf,
-                  # "bf": bf
+                  "Wf": Wf,
+                  "bf": bf
                    }
 
     return parameters
@@ -94,28 +100,32 @@ def forward_propagation(X, parameters, keep_prob, training):
     W2 = parameters['W2']
     b2 = parameters['b2']
     W3 = parameters['W3']
-    # b3 = parameters['b3']
-    # Wf = parameters['Wf']
-    # bf = parameters['bf']
+    b3 = parameters['b3']
+    Wf = parameters['Wf']
+    bf = parameters['bf']
 
-    # input = 32x32x3 o/p = 28x28x32
+    # input = 32x32x3 o/p = 30x30x32
     Z1 = tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME')
     A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
     # A1 = tf.layers.batch_normalization(A1, training=training)
-    # input = 28x28x32 o/p = 26x26x48
+    # input = 30x30x32 o/p = 28x28x48
     Z1 = tf.nn.conv2d(A1, W3, strides=[1, 1, 1, 1], padding='SAME')
     A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
 
-    # input = 26x26x48 o/p = 8x8x48
+    # input = 28x28x48 o/p = 14x14x48
     P1 = tf.nn.max_pool(A1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     # A1 = tf.nn.dropout(A1, keep_prob=keep_prob)
 
-    #input = 8x8x48 o/p = 6x6x64
+    #input = 14x14x48 o/p = 12x12x64
     Z2 = tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME')
     A2 = tf.nn.relu(Z2)  # A2 = relu(Z2)
+    # input = 12x12x64 o/p = 10x10x128
+    Z2 = tf.nn.conv2d(A2, Wf, strides=[1, 1, 1, 1], padding='SAME')
+    A2 = tf.nn.relu(Z2)  # A2 = relu(Z2)
+
     # A2 = tf.layers.batch_normalization(A2, training=training)
-    #input = 6x6x64 o/p = 3x3x64
+    #input = 10x10x128 o/p = 5x5x128
     P2 = tf.nn.max_pool(A2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     P2 = tf.contrib.layers.flatten(P2)
@@ -204,10 +214,6 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                     costs.append(epoch_cost)
             saver.save(sess, './model/model')
             # plot the cost
-            plt.plot(np.squeeze(costs))
-            plt.ylabel('cost')
-            plt.xlabel('iterations (per tens)')
-            plt.title("Learning rate =" + str(learning_rate))
             # plt.show()
 
             # lets save the parameters in a variable
