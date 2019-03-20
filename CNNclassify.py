@@ -115,7 +115,7 @@ def forward_propagation(X, parameters, keep_prob, training):
     P2 = tf.nn.max_pool(A2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     P2 = tf.contrib.layers.flatten(P2)
-    Zf = tf.contrib.layers.fully_connected(P2, num_outputs=100, activation_fn=None)
+    Zf = tf.contrib.layers.fully_connected(P2, num_outputs=500, activation_fn=None)
     Zf = tf.contrib.layers.fully_connected(Zf, num_outputs=10, activation_fn=None)
     return Zf
 
@@ -136,7 +136,7 @@ def compute_cost(Zf, Y, beta=0.1):
     return loss
 
 
-def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.0005,
+def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.0009,
           num_epochs=101, minibatch_size=32, print_cost=True):
 
     ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
