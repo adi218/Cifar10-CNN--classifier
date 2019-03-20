@@ -115,7 +115,8 @@ def forward_propagation(X, parameters, keep_prob, training):
     P2 = tf.nn.max_pool(A2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     P2 = tf.contrib.layers.flatten(P2)
-    Zf = tf.contrib.layers.fully_connected(P2, num_outputs=10, activation_fn=None)
+    Zf = tf.contrib.layers.fully_connected(P2, num_outputs=100, activation_fn=None)
+    Zf = tf.contrib.layers.fully_connected(Zf, num_outputs=10, activation_fn=None)
     return Zf
 
 
