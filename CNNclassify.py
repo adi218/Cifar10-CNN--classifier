@@ -67,11 +67,11 @@ def initialize_parameters():
     # to add to regularizer
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, W1)
     b1 = tf.get_variable("b1", [32], initializer=tf.zeros_initializer())
-    W2 = tf.get_variable("W2", [5, 5, 32, 64], initializer=tf.contrib.layers.xavier_initializer())
+    W2 = tf.get_variable("W2", [3, 3, 48, 64], initializer=tf.contrib.layers.xavier_initializer())
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, W2)
     b2 = tf.get_variable("b2", [64], initializer=tf.zeros_initializer())
-    # W3 = tf.get_variable("W3", [50, 25], initializer=tf.contrib.layers.xavier_initializer())
-    # b3 = tf.get_variable("b3", [50, 1], initializer=tf.zeros_initializer())
+    W3 = tf.get_variable("W3", [3, 3, 32, 48], initializer=tf.contrib.layers.xavier_initializer())
+    b3 = tf.get_variable("b3", [48, 1], initializer=tf.zeros_initializer())
     # Wf = tf.get_variable("Wf", [10, 30], initializer=tf.contrib.layers.xavier_initializer())
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, Wf)
     # bf = tf.get_variable("bf", [10, 1], initializer=tf.zeros_initializer())
@@ -79,8 +79,8 @@ def initialize_parameters():
                   "b1": b1,
                   "W2": W2,
                   "b2": b2,
-                  # "W3": W3,
-                  # "b3": b3,
+                  "W3": W3,
+                  "b3": b3,
                   # "Wf": Wf,
                   # "bf": bf
                    }
@@ -93,7 +93,7 @@ def forward_propagation(X, parameters, keep_prob, training):
     b1 = parameters['b1']
     W2 = parameters['W2']
     b2 = parameters['b2']
-    # W3 = parameters['W3']
+    W3 = parameters['W3']
     # b3 = parameters['b3']
     # Wf = parameters['Wf']
     # bf = parameters['bf']
@@ -102,20 +102,24 @@ def forward_propagation(X, parameters, keep_prob, training):
     Z1 = tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME')
     A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
     # A1 = tf.layers.batch_normalization(A1, training=training)
-    # input = 28x28x32 o/p = 14x14x32
+    # input = 28x28x32 o/p = 26x26x48
+    Z1 = tf.nn.conv2d(A1, W3, strides=[1, 1, 1, 1], padding='SAME')
+    A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
+
+    # input = 26x26x48 o/p = 8x8x48
     P1 = tf.nn.max_pool(A1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     # A1 = tf.nn.dropout(A1, keep_prob=keep_prob)
 
-    #input = 14x14x32 o/p = 10x10x64
+    #input = 8x8x48 o/p = 6x6x64
     Z2 = tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME')
     A2 = tf.nn.relu(Z2)  # A2 = relu(Z2)
     # A2 = tf.layers.batch_normalization(A2, training=training)
-    #input = 10x10x48 o/p = 5x5x64
+    #input = 6x6x64 o/p = 3x3x64
     P2 = tf.nn.max_pool(A2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     P2 = tf.contrib.layers.flatten(P2)
-    Zf = tf.contrib.layers.fully_connected(P2, num_outputs=600, activation_fn=None)
+    Zf = tf.contrib.layers.fully_connected(P2, num_outputs=500, activation_fn=None)
     Zf = tf.contrib.layers.fully_connected(Zf, num_outputs=10, activation_fn=None)
     return Zf
 
@@ -162,7 +166,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
     cost = compute_cost(Zf, Y)
 
     # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer.
-    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=0.99).minimize(cost)
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
     # Initialize all the variables
     init = tf.global_variables_initializer()
