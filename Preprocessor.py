@@ -1,6 +1,6 @@
 import keras
 import numpy as np
-from keras.datasets import cifar10
+from keras.datasets import cifar10, mnist
 
 class Preprocessor:
     labels_train_arr = []

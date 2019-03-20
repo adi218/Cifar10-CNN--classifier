@@ -28,8 +28,8 @@ def random_mini_batches(X, Y, mini_batch_size=64, seed=0):
 
     # Step 1: Shuffle (X, Y)
     permutation = list(np.random.permutation(m))
-    shuffled_X = X
-    shuffled_Y = Y
+    shuffled_X = X[permutation]
+    shuffled_Y = Y[permutation]
 
     # Step 2: Partition (shuffled_X, shuffled_Y). Minus the end case.
     num_complete_minibatches = math.floor(
@@ -135,7 +135,7 @@ def compute_cost(Zf, Y, beta=0.1):
 
 
 def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.0002,
-          num_epochs=101, minibatch_size=4, print_cost=True):
+          num_epochs=101, minibatch_size=32, print_cost=True):
 
     ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
     tf.set_random_seed(1)  # to keep consistent results
