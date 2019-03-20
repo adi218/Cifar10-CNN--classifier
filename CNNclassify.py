@@ -99,7 +99,7 @@ def forward_propagation(X, parameters, keep_prob, training):
     # bf = parameters['bf']
 
     # input = 32x32x3 o/p = 28x28x32
-    Z1 = tf.nn.bias_add(tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME'), b1)
+    Z1 = tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME')
     A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
     # A1 = tf.layers.batch_normalization(A1, training=training)
     # input = 28x28x32 o/p = 14x14x32
@@ -108,7 +108,7 @@ def forward_propagation(X, parameters, keep_prob, training):
     # A1 = tf.nn.dropout(A1, keep_prob=keep_prob)
 
     #input = 14x14x32 o/p = 10x10x64
-    Z2 = tf.nn.bias_add(tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME'), b2)
+    Z2 = tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME')
     A2 = tf.nn.relu(Z2)  # A2 = relu(Z2)
     # A2 = tf.layers.batch_normalization(A2, training=training)
     #input = 10x10x48 o/p = 5x5x64
