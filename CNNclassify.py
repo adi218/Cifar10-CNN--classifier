@@ -99,17 +99,18 @@ def forward_propagation(X, parameters, keep_prob, training):
     # bf = parameters['bf']
 
     # input = 32x32x3 o/p = 28x28x32
-    Z1 = tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME') # conv + b1
+    Z1 = tf.nn.conv2d(X, W1, strides=[1,1,1,1], padding='SAME') + b1
     A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
+    A1 = tf.layers.batch_normalization(A1, axis=0, training=training)
     # input = 28x28x32 o/p = 14x14x32
     P1 = tf.nn.max_pool(A1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
-    # A1 = tf.layers.batch_normalization(A1, axis=0, training=training)
+
     # A1 = tf.nn.dropout(A1, keep_prob=keep_prob)
 
     #input = 14x14x32 o/p = 10x10x48
-    Z2 = tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME') # Z2 = np.dot(W2, a1) + b2
+    Z2 = tf.nn.conv2d(P1, W2, strides=[1,1,1,1], padding ='SAME') + b2
     A2 = tf.nn.relu(Z2)  # A2 = relu(Z2)
-
+    A2 = tf.layers.batch_normalization(A2, axis=0, training=training)
     #input = 10x10x48 o/p = 5x5x48
     P2 = tf.nn.max_pool(A2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
@@ -160,7 +161,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.0002,
     cost = compute_cost(Zf, Y)
 
     # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer.
-    optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(cost)
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
 
     # Initialize all the variables
     init = tf.global_variables_initializer()
