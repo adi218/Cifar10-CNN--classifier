@@ -136,7 +136,7 @@ def compute_cost(Zf, Y, beta=0.1):
     return loss
 
 
-def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.0009,
+def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
           num_epochs=101, minibatch_size=32, print_cost=True):
 
     ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
@@ -162,7 +162,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.0009,
     cost = compute_cost(Zf, Y)
 
     # Backpropagation: Define the tensorflow optimizer. Use an AdamOptimizer.
-    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)
+    optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate, beta1=0.99).minimize(cost)
 
     # Initialize all the variables
     init = tf.global_variables_initializer()
