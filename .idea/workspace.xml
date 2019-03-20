@@ -19,8 +19,8 @@
       <file leaf-file-name="CNNclassify.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CNNclassify.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="110">
-              <caret line="112" column="40" lean-forward="true" selection-start-line="112" selection-start-column="40" selection-end-line="112" selection-end-column="40" />
+            <state relative-caret-position="574">
+              <caret line="218" column="0" lean-forward="true" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -57,6 +57,7 @@
       <find>print</find>
       <find>.T</find>
       <find>plot</find>
+      <find>costs</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -311,8 +312,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CNNclassify.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="112" column="40" lean-forward="true" selection-start-line="112" selection-start-column="40" selection-end-line="112" selection-end-column="40" />
+        <state relative-caret-position="574">
+          <caret line="218" column="0" lean-forward="true" selection-start-line="218" selection-start-column="0" selection-end-line="218" selection-end-column="0" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>

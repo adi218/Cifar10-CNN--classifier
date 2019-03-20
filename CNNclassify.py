@@ -151,7 +151,7 @@ def compute_cost(Zf, Y, beta=0.1):
 
 
 def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
-          num_epochs=30, minibatch_size=32, print_cost=True):
+          num_epochs=11, minibatch_size=32, print_cost=True):
 
     ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
     tf.set_random_seed(1)  # to keep consistent results
@@ -194,6 +194,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
             for epoch in range(num_epochs):
 
                 epoch_cost = 0.  # Defines a cost related to an epoch
+                train_acc = 0.
                 validation_cost = 0
                 num_minibatches = int(m / minibatch_size)  # number of minibatches of size minibatch_size in the train set
                 seed = seed + 1
@@ -204,31 +205,18 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                     (minibatch_X, minibatch_Y) = minibatch
                     # Run the session to execute the "optimizer" and the "cost", the feedict should contain a minibatch for (X,Y).
                     _, minibatch_cost = sess.run([optimizer, cost], feed_dict={X: minibatch_X, Y: minibatch_Y, keep_prob:0.8, training:True})
-
+                    train_acc += train_accuracy(Zf, X, Y, minibatch_X, minibatch_Y, keep_prob, training)/num_minibatches
                     epoch_cost += minibatch_cost / num_minibatches
                 minibatch_validation_cost = sess.run(cost, feed_dict={X: X_test, Y: Y_test, keep_prob: 0.8, training:True})
                 validation_cost += minibatch_validation_cost
                 # Print the cost every epoch
-                train_summary(epoch+1, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train, X_test, Y_test, keep_prob, training)
+                train_summary(epoch+1, epoch_cost, validation_cost, Zf, X, Y, train_acc, X_test, Y_test, keep_prob, training)
                 if print_cost == True and epoch % 5 == 0:
                     costs.append(epoch_cost)
             saver.save(sess, './model/model')
             # plot the cost
             # plt.show()
 
-            # lets save the parameters in a variable
-            parameters = sess.run(parameters)
-            # print("Parameters have been trained!")
-
-            # Calculate the correct predictions
-            correct_prediction = tf.equal(tf.argmax(Zf), tf.argmax(Y))
-            # Calculate accuracy on the test set
-            accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-
-            # print("Train Accuracy:", accuracy.eval({X: X_train, Y: Y_train, keep_prob:1, training:False}))
-            print("Test Accuracy:", accuracy.eval({X: X_test, Y: Y_test, keep_prob:1, training:False}))
-
-            return parameters
         else:
             label_dic = {0: 'airplane', 1: 'automobile', 2: 'bird', 3: 'cat', 4: 'deer', 5: 'dog', 6: 'frog',
                          7: 'horse', 8: 'ship', 9: 'truck'}
@@ -243,21 +231,29 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                 print(label_dic[sess.run(tf.argmax(Zf), feed_dict={X: img, keep_prob:1, training:False})[0]])
 
 
-
-
-def train_summary(epoch, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train, X_test, Y_test, keep_prob, training):
-
+def train_accuracy(Zf, X, Y, X_test, Y_test, keep_prob, training):
     # Calculate the correct predictions
     correct_prediction = tf.equal(tf.argmax(Zf, 1), tf.argmax(Y, 1))
     # Calculate accuracy on the test set
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
     # train_accuracy = accuracy.eval({X: X_train, Y: Y_train, keep_prob: 1, training:False})
+    test_accuracy = accuracy.eval({X: X_test, Y: Y_test, keep_prob: 1, training: False})
+    return test_accuracy
+
+def train_summary(epoch, epoch_cost, validation_cost, Zf, X, Y, train_acc, X_test, Y_test, keep_prob, training):
+
+    # Calculate the correct predictions
+    correct_prediction = tf.equal(tf.argmax(Zf, 1), tf.argmax(Y, 1))
+    # Calculate accuracy on the test set
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+
+    train_accuracy = train_acc
     test_accuracy = accuracy.eval({X: X_test, Y: Y_test, keep_prob: 1, training:False})
 
     if epoch -1 == 0:
-        print("Loop" + '\t' + "Train Loss" + '\t' + "Test Loss" + '\t' + "Test Acc %")
-    print("%i \t \t %f \t %f \t %f" % (epoch, epoch_cost, validation_cost, test_accuracy*100))
+        print("Loop" + '\t' + "Train Loss" + '\t' + "Train Acc" + '\t' + "Test Loss" + '\t' + "Test Acc")
+    print("%i \t \t %f \t %f \t %f" % (epoch, epoch_cost, train_acc, validation_cost, test_accuracy*100))
 
 
 
