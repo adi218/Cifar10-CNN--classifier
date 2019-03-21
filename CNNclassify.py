@@ -109,11 +109,11 @@ def forward_propagation(X, parameters, keep_prob, training):
     A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
     # A1 = tf.layers.batch_normalization(A1, training=training)
     # input = 30x30x32 o/p = 28x28x48
-    Z1 = tf.nn.conv2d(A1, W3, strides=[1, 1, 1, 1], padding='SAME')
-    A1 = tf.nn.relu(Z1)  # A1 = relu(Z1)
+    Zn = tf.nn.conv2d(A1, W3, strides=[1, 1, 1, 1], padding='SAME')
+    An = tf.nn.relu(Zn)  # A1 = relu(Z1)
 
     # input = 28x28x48 o/p = 14x14x48
-    P1 = tf.nn.max_pool(A1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+    P1 = tf.nn.max_pool(An, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
     # A1 = tf.nn.dropout(A1, keep_prob=keep_prob)
 
@@ -240,7 +240,6 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                     iy += 2
                     npad = ((1, 1), (1, 1), (0, 0))
                     v = np.pad(v, pad_width=npad, mode='constant', constant_values=p)
-                    v = v[:,:,:32]
                     v = np.reshape(v, (iy, ix, cy, cx))
                     v = np.transpose(v, (2, 0, 3, 1))  # cy,iy,cx,ix
                     v = np.reshape(v, (cy * iy, cx * ix))
@@ -249,7 +248,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                 # W_conv1 - weights
                 ix = 32  # data size
                 iy = 32
-                ch = 48
+                ch = 32
                 cy = 4  # grid from channels:  32 = 4x8
                 cx = 8
 

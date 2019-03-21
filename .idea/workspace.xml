@@ -19,8 +19,8 @@
       <file leaf-file-name="CNNclassify.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CNNclassify.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="487">
-              <caret line="235" column="84" lean-forward="false" selection-start-line="235" selection-start-column="84" selection-end-line="235" selection-end-column="84" />
+            <state relative-caret-position="418">
+              <caret line="241" column="85" lean-forward="false" selection-start-line="241" selection-start-column="85" selection-end-line="241" selection-end-column="85" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -31,7 +31,7 @@
       <file leaf-file-name="Preprocessor.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Preprocessor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
+            <state relative-caret-position="418">
               <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
@@ -112,8 +112,8 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -176,7 +176,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="65" y="24" width="1857" height="1092" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24959569" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -211,6 +211,26 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/CNNclassify.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Preprocessor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/CNNclassify.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -413,7 +433,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Preprocessor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
+        <state relative-caret-position="418">
           <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
@@ -423,8 +443,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CNNclassify.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="235" column="84" lean-forward="false" selection-start-line="235" selection-start-column="84" selection-end-line="235" selection-end-column="84" />
+        <state relative-caret-position="418">
+          <caret line="241" column="85" lean-forward="false" selection-start-line="241" selection-start-column="85" selection-end-line="241" selection-end-column="85" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
