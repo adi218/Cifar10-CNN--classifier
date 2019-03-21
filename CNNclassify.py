@@ -63,7 +63,7 @@ def create_placeholders(n_h, n_w, n_c, n_y):
 def initialize_parameters():
 
 
-    W1 = tf.get_variable("W1", [3, 3, 3, 32], initializer=tf.contrib.layers.xavier_initializer())
+    W1 = tf.get_variable("W1", [5, 5, 3, 32], initializer=tf.contrib.layers.xavier_initializer())
     # to add to regularizer
     # tf.add_to_collection(tf.GraphKeys.REGULARIZATION_LOSSES, W1)
     b1 = tf.get_variable("b1", [32], initializer=tf.zeros_initializer())
@@ -131,7 +131,7 @@ def forward_propagation(X, parameters, keep_prob, training):
     P2 = tf.contrib.layers.flatten(P2)
     Zf = tf.contrib.layers.fully_connected(P2, num_outputs=500, activation_fn=None)
     Zf = tf.contrib.layers.fully_connected(Zf, num_outputs=10, activation_fn=None)
-    return Zf
+    return Z1, Zf
 
 
 def compute_cost(Zf, Y, beta=0.1):
@@ -170,7 +170,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
     training = tf.placeholder(tf.bool)
 
     # Forward propagation: Build the forward propagation in the tensorflow graph
-    Zf = forward_propagation(X, parameters, keep_prob=keep_prob, training=training)
+    Z1, Zf = forward_propagation(X, parameters, keep_prob=keep_prob, training=training)
 
     # Cost function: Add cost function to tensorflow graph
     cost = compute_cost(Zf, Y)
@@ -229,7 +229,35 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
             else:
                 img = np.expand_dims(img, axis=0)
                 saver.restore(sess, "./model/model")
+
                 print(label_dic[sess.run(tf.argmax(Zf), feed_dict={X: img, keep_prob:1, training:False})[0]])
+                layer_op = sess.run(Z1, feed_dict={X: img, keep_prob: 1, training: False})
+                vv2 = layer_op[0, :, :, :]  # in case of bunch out - slice first img
+                print(layer_op.shape)
+                def vis_conv(v, ix, iy, ch, cy, cx, p=0):
+                    v = np.reshape(v, (iy, ix, ch))
+                    ix += 2
+                    iy += 2
+                    npad = ((1, 1), (1, 1), (0, 0))
+                    v = np.pad(v, pad_width=npad, mode='constant', constant_values=p)
+                    v = np.reshape(v, (iy, ix, cy, cx))
+                    v = np.transpose(v, (2, 0, 3, 1))  # cy,iy,cx,ix
+                    v = np.reshape(v, (cy * iy, cx * ix))
+                    return v
+
+                # W_conv1 - weights
+                ix = 30  # data size
+                iy = 30
+                ch = 32
+                cy = 4  # grid from channels:  32 = 4x8
+                cx = 8
+
+                #  h_conv1 - processed image
+                ix = 30  # data size
+                iy = 30
+                v = vis_conv(vv2, ix, iy, ch, cy, cx)
+                plt.figure(figsize=(8, 8))
+                plt.imshow(v, cmap="Greys_r", interpolation='nearest')
 
 
 # def train_accuracy(Zf, X, Y, X_test, Y_test, keep_prob, training):
