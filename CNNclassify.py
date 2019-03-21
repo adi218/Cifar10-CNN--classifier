@@ -151,7 +151,7 @@ def compute_cost(Zf, Y, beta=0.1):
 
 
 def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
-          num_epochs=11, minibatch_size=64, print_cost=True):
+          num_epochs=11, minibatch_size=32, print_cost=True):
 
     ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
     tf.set_random_seed(1)  # to keep consistent results
@@ -199,7 +199,8 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                 num_minibatches = int(m / minibatch_size)  # number of minibatches of size minibatch_size in the train set
                 seed = seed + 1
                 minibatches = random_mini_batches(X_train, Y_train, minibatch_size, seed)
-
+                minibatch_X = None
+                minibatch_Y = None
                 for minibatch in minibatches:
                     # Select a minibatch
                     (minibatch_X, minibatch_Y) = minibatch
@@ -210,7 +211,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                 minibatch_validation_cost = sess.run(cost, feed_dict={X: X_test, Y: Y_test, keep_prob: 0.8, training:True})
                 validation_cost += minibatch_validation_cost
                 # Print the cost every epoch
-                train_summary(epoch+1, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train, X_test, Y_test, keep_prob, training)
+                train_summary(epoch+1, epoch_cost, validation_cost, Zf, X, Y, minibatch_X, minibatch_Y, X_test, Y_test, keep_prob, training)
                 if print_cost == True and epoch % 5 == 0:
                     costs.append(epoch_cost)
             saver.save(sess, './model/model')
