@@ -206,12 +206,11 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                     # Run the session to execute the "optimizer" and the "cost", the feedict should contain a minibatch for (X,Y).
                     _, minibatch_cost = sess.run([optimizer, cost], feed_dict={X: minibatch_X, Y: minibatch_Y, keep_prob:0.8, training:True})
 
-                    train_acc += train_accuracy(Zf, X, Y, minibatch_X, minibatch_Y, keep_prob, training)/num_minibatches
                     epoch_cost += minibatch_cost / num_minibatches
                 minibatch_validation_cost = sess.run(cost, feed_dict={X: X_test, Y: Y_test, keep_prob: 0.8, training:True})
                 validation_cost += minibatch_validation_cost
                 # Print the cost every epoch
-                train_summary(epoch+1, epoch_cost, validation_cost, Zf, X, Y, train_acc, X_test, Y_test, keep_prob, training)
+                train_summary(epoch+1, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train, X_test, Y_test, keep_prob, training)
                 if print_cost == True and epoch % 5 == 0:
                     costs.append(epoch_cost)
             saver.save(sess, './model/model')
@@ -232,29 +231,29 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                 print(label_dic[sess.run(tf.argmax(Zf), feed_dict={X: img, keep_prob:1, training:False})[0]])
 
 
-def train_accuracy(Zf, X, Y, X_test, Y_test, keep_prob, training):
+# def train_accuracy(Zf, X, Y, X_test, Y_test, keep_prob, training):
+#     # Calculate the correct predictions
+#     correct_prediction = tf.equal(tf.argmax(Zf, 1), tf.argmax(Y, 1))
+#     # Calculate accuracy on the test set
+#     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
+#
+#     # train_accuracy = accuracy.eval({X: X_train, Y: Y_train, keep_prob: 1, training:False})
+#     test_accuracy = accuracy.eval({X: X_test, Y: Y_test, keep_prob: 1, training: False})
+#     return test_accuracy
+
+def train_summary(epoch, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train, X_test, Y_test, keep_prob, training):
+
     # Calculate the correct predictions
     correct_prediction = tf.equal(tf.argmax(Zf, 1), tf.argmax(Y, 1))
     # Calculate accuracy on the test set
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
 
-    # train_accuracy = accuracy.eval({X: X_train, Y: Y_train, keep_prob: 1, training:False})
-    test_accuracy = accuracy.eval({X: X_test, Y: Y_test, keep_prob: 1, training: False})
-    return test_accuracy
-
-def train_summary(epoch, epoch_cost, validation_cost, Zf, X, Y, train_acc, X_test, Y_test, keep_prob, training):
-
-    # Calculate the correct predictions
-    correct_prediction = tf.equal(tf.argmax(Zf, 1), tf.argmax(Y, 1))
-    # Calculate accuracy on the test set
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
-
-    train_accuracy = train_acc
+    train_accuracy = accuracy.eval({X: X_train, Y: Y_train, keep_prob: 1, training:False})
     test_accuracy = accuracy.eval({X: X_test, Y: Y_test, keep_prob: 1, training:False})
 
     if epoch -1 == 0:
         print("Loop" + '\t' + "Train Loss" + '\t' + "Train Acc" + '\t' + "Test Loss" + '\t' + "Test Acc")
-    print("%i \t %f \t %f \t %f \t %f" % (epoch, epoch_cost, train_acc, validation_cost, test_accuracy*100))
+    print("%i \t %f \t %f \t %f \t %f" % (epoch, epoch_cost, train_accuracy, validation_cost, test_accuracy*100))
 
 
 
