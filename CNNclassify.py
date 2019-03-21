@@ -205,9 +205,8 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                     (minibatch_X, minibatch_Y) = minibatch
                     # Run the session to execute the "optimizer" and the "cost", the feedict should contain a minibatch for (X,Y).
                     _, minibatch_cost = sess.run([optimizer, cost], feed_dict={X: minibatch_X, Y: minibatch_Y, keep_prob:0.8, training:True})
-                    print(epoch)
+
                     train_acc += train_accuracy(Zf, X, Y, minibatch_X, minibatch_Y, keep_prob, training)/num_minibatches
-                    print("here")
                     epoch_cost += minibatch_cost / num_minibatches
                 minibatch_validation_cost = sess.run(cost, feed_dict={X: X_test, Y: Y_test, keep_prob: 0.8, training:True})
                 validation_cost += minibatch_validation_cost
@@ -255,7 +254,7 @@ def train_summary(epoch, epoch_cost, validation_cost, Zf, X, Y, train_acc, X_tes
 
     if epoch -1 == 0:
         print("Loop" + '\t' + "Train Loss" + '\t' + "Train Acc" + '\t' + "Test Loss" + '\t' + "Test Acc")
-    print("%i \t \t %f \t %f \t %f" % (epoch, epoch_cost, train_acc, validation_cost, test_accuracy*100))
+    print("%i \t %f \t %f \t %f \t %f" % (epoch, epoch_cost, train_acc, validation_cost, test_accuracy*100))
 
 
 
