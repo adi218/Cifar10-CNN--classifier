@@ -205,7 +205,9 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                     (minibatch_X, minibatch_Y) = minibatch
                     # Run the session to execute the "optimizer" and the "cost", the feedict should contain a minibatch for (X,Y).
                     _, minibatch_cost = sess.run([optimizer, cost], feed_dict={X: minibatch_X, Y: minibatch_Y, keep_prob:0.8, training:True})
+                    print(epoch)
                     train_acc += train_accuracy(Zf, X, Y, minibatch_X, minibatch_Y, keep_prob, training)/num_minibatches
+                    print("here")
                     epoch_cost += minibatch_cost / num_minibatches
                 minibatch_validation_cost = sess.run(cost, feed_dict={X: X_test, Y: Y_test, keep_prob: 0.8, training:True})
                 validation_cost += minibatch_validation_cost
