@@ -151,7 +151,7 @@ def compute_cost(Zf, Y, beta=0.1):
 
 
 def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
-          num_epochs=11, minibatch_size=32, print_cost=True):
+          num_epochs=11, minibatch_size=64, print_cost=True):
 
     ops.reset_default_graph()  # to be able to rerun the model without overwriting tf variables
     tf.set_random_seed(1)  # to keep consistent results
