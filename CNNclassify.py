@@ -234,31 +234,30 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
                 print(label_dic[sess.run(tf.argmax(Zf), feed_dict={X: img, keep_prob:1, training:False})[0]])
                 layer_op = sess.run(Z1, feed_dict={X: img, keep_prob: 1, training: False})
                 vv2 = layer_op[0, :, :, :]  # in case of bunch out - slice first img
-                print(layer_op.shape)
                 def vis_conv(v, ix, iy, ch, cy, cx, p=0):
                     v = np.reshape(v, (iy, ix, ch))
                     ix += 2
                     iy += 2
                     npad = ((1, 1), (1, 1), (0, 0))
                     v = np.pad(v, pad_width=npad, mode='constant', constant_values=p)
+                    v = v[:,:,:32]
                     v = np.reshape(v, (iy, ix, cy, cx))
                     v = np.transpose(v, (2, 0, 3, 1))  # cy,iy,cx,ix
                     v = np.reshape(v, (cy * iy, cx * ix))
                     return v
 
                 # W_conv1 - weights
-                ix = 30  # data size
-                iy = 30
-                ch = 32
+                ix = 32  # data size
+                iy = 32
+                ch = 48
                 cy = 4  # grid from channels:  32 = 4x8
                 cx = 8
 
                 #  h_conv1 - processed image
-                ix = 30  # data size
-                iy = 30
                 v = vis_conv(vv2, ix, iy, ch, cy, cx)
                 plt.figure(figsize=(8, 8))
                 plt.imshow(v, cmap="Greys_r", interpolation='nearest')
+                plt.show()
 
 
 # def train_accuracy(Zf, X, Y, X_test, Y_test, keep_prob, training):
