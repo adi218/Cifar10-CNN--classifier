@@ -227,6 +227,7 @@ def model(X_train, Y_train, X_test, Y_test, op, file=None, learning_rate=0.001,
             if not img.shape == (32, 32, 3):
                 print("shape_issue")
             else:
+                np.expand_dims(img, axis=0)
                 saver.restore(sess, "./model/model")
                 print(label_dic[sess.run(tf.argmax(Zf), feed_dict={X: img, keep_prob:1, training:False})[0]])
 
