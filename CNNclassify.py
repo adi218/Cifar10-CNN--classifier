@@ -130,6 +130,7 @@ def forward_propagation(X, parameters, keep_prob, training):
 
     P2 = tf.contrib.layers.flatten(P2)
     Zf = tf.contrib.layers.fully_connected(P2, num_outputs=500, activation_fn=None)
+    Zf = tf.contrib.layers.dropout(Zf, keep_prob=keep_prob, is_training=training)
     Zf = tf.contrib.layers.fully_connected(Zf, num_outputs=10, activation_fn=None)
     return Z1, Zf
 
