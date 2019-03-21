@@ -19,8 +19,8 @@
       <file leaf-file-name="CNNclassify.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CNNclassify.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-475">
-              <caret line="213" column="102" lean-forward="false" selection-start-line="213" selection-start-column="102" selection-end-line="213" selection-end-column="102" />
+            <state relative-caret-position="435">
+              <caret line="256" column="79" lean-forward="false" selection-start-line="256" selection-start-column="79" selection-end-line="256" selection-end-column="79" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -32,7 +32,7 @@
         <entry file="file://$PROJECT_DIR$/Preprocessor.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="462">
-              <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+              <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -303,7 +303,7 @@
     <entry file="file://$PROJECT_DIR$/Preprocessor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="462">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>
@@ -312,8 +312,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CNNclassify.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-475">
-          <caret line="213" column="102" lean-forward="false" selection-start-line="213" selection-start-column="102" selection-end-line="213" selection-end-column="102" />
+        <state relative-caret-position="435">
+          <caret line="256" column="79" lean-forward="false" selection-start-line="256" selection-start-column="79" selection-end-line="256" selection-end-column="79" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>

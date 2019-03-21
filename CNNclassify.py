@@ -254,7 +254,7 @@ def train_summary(epoch, epoch_cost, validation_cost, Zf, X, Y, X_train, Y_train
 
     if epoch -1 == 0:
         print("Loop" + '\t' + "Train Loss" + '\t' + "Train Acc" + '\t' + "Test Loss" + '\t' + "Test Acc")
-    print("%i \t %f \t %f \t %f \t %f" % (epoch, epoch_cost, train_accuracy, validation_cost, test_accuracy*100))
+    print("%i \t %f \t %f \t %f \t %f" % (epoch, epoch_cost, train_accuracy*100, validation_cost, test_accuracy*100))
 
 
 
