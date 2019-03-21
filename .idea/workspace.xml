@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0ef223d6-8847-4f31-9e4f-457335f93aa7" name="Default" comment="" />
+    <list default="true" id="0ef223d6-8847-4f31-9e4f-457335f93aa7" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CNNclassify.py" afterPath="$PROJECT_DIR$/CNNclassify.py" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,8 +19,8 @@
       <file leaf-file-name="CNNclassify.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/CNNclassify.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4505">
-              <caret line="285" column="47" lean-forward="false" selection-start-line="285" selection-start-column="47" selection-end-line="285" selection-end-column="47" />
+            <state relative-caret-position="303">
+              <caret line="229" column="16" lean-forward="false" selection-start-line="229" selection-start-column="16" selection-end-line="229" selection-end-column="16" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -310,8 +312,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/CNNclassify.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4505">
-          <caret line="285" column="47" lean-forward="false" selection-start-line="285" selection-start-column="47" selection-end-line="285" selection-end-column="47" />
+        <state relative-caret-position="303">
+          <caret line="229" column="16" lean-forward="false" selection-start-line="229" selection-start-column="16" selection-end-line="229" selection-end-column="16" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
